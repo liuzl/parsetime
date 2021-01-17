@@ -21,6 +21,7 @@ var (
 	reRFC8xx1123       = regexp.MustCompile(RFC8xx1123)
 	reANSIC            = regexp.MustCompile(ANSIC)
 	reUS               = regexp.MustCompile(US)
+	tz                 = timezone.New()
 )
 
 type sortedTime struct {
@@ -60,7 +61,7 @@ func NewParseTime(location ...interface{}) (ParseTime, error) {
 				loc, err = time.LoadLocation(val)
 				if err != nil {
 					var offset int
-					offset, err = timezone.GetOffset(val)
+					offset, err = tz.GetOffset(val)
 					if err != nil {
 						return ParseTime{}, errInvalidTimezone
 					}
@@ -114,7 +115,7 @@ func parseOffset(value string) (*time.Location, error) {
 	_, err = time.Parse("MST", value)
 	if err == nil {
 		var offset int
-		offset, err = timezone.GetOffset(value)
+		offset, err = tz.GetOffset(value)
 		if err != nil {
 			return loc, err
 		}
