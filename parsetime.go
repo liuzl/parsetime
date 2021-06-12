@@ -529,6 +529,11 @@ func (pt *ParseTime) Parse(value string) (time.Time, error) {
 		times = append(times, sortedTime{time: t, priority: priority})
 	}
 
+	t, _ = time.ParseInLocation("1/02/2006, 3:04:05 PM", value, pt.location)
+	if !t.IsZero() {
+		times = append(times, sortedTime{time: t, priority: 0})
+	}
+
 	if len(times) == 0 {
 		var tmpT time.Time
 		return tmpT, errInvalidDateTime
